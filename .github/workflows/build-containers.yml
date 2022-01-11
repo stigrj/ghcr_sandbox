@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  release:
+    types:
+      - published
 
 jobs:
   build-test-containers:
@@ -33,9 +36,15 @@ jobs:
           echo "Building ${{ matrix.program }}: REF:${GITHUB_REF} SHA:${GITHUB_SHA}"
           echo "IMAGE_NAME=$image_name" >> $GITHUB_ENV
           sudo -E singularity build container.sif recipes/"$recipe_name"
-          # use latest as tag
-          tag="latest"
+          if [[ "${GITHUB_EVENT_NAME}"== "release" ]]
+          then
+            tag="$GITHUB_REF"
+          else
+            tag="latest"
+          fi
+          
           # Build the container and name by tag
+          echo "TAG=$tag"
           echo "TAG=$tag" >> $GITHUB_ENV
 
       - name: Login and deploy container
