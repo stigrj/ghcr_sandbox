@@ -43,6 +43,10 @@ jobs:
           else
             tag=$(basename $GITHUB_REF)
           fi
+          basename $GITHUB_REF
+          basename $GITHUB_REF
+          basename $GITHUB_REF
+          basename $GITHUB_REF
           
           # Build the container and name by tag
           echo "TAG=$tag"
