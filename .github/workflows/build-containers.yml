@@ -33,19 +33,26 @@ jobs:
           image_name: ${{ matrix.program }}
           recipe_name: Singularity.def
         run: |
-          echo "Building ${{ matrix.program }}: REF:" ${GITHUB_REF} " SHA:" ${GITHUB_SHA}
-          echo "EVENT_NAME: " $GITHUB_EVENT_NAME
+          echo "Building ${{ matrix.program }}"
+          echo "GITHUB_REF: ${GITHUB_REF}"
+          echo "GITHUB_SHA: ${GITHUB_SHA}"
+          echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
           echo "IMAGE_NAME=$image_name" >> $GITHUB_ENV
+
+          # build container
           sudo -E singularity build container.sif recipes/"$recipe_name"
-          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]
+
+          # determine release tag
+          if [[ ${GITHUB_EVENT_NAME} == "release" ]]
           then
-            tag="latest"
+            # give release events tag "vX.Y.Z" (GITHUB_REF=refs/tags/vX.Y.Z) 
+            tag=$(basename $GITHUB_REF)
           else
-            tag=$GITHUB_REF
+            # give push events on main tag "latest" 
+            tag="latest"
           fi
           
           # Build the container and name by tag
-          echo "TAG=$tag"
           echo "TAG=$tag" >> $GITHUB_ENV
 
       - name: Login and deploy container
