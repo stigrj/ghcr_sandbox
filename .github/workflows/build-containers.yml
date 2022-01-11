@@ -37,11 +37,11 @@ jobs:
           echo "EVENT_NAME: " $GITHUB_EVENT_NAME
           echo "IMAGE_NAME=$image_name" >> $GITHUB_ENV
           sudo -E singularity build container.sif recipes/"$recipe_name"
-          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]
+          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]
           then
-            tag=$GITHUB_REF
-          else
             tag="latest"
+          else
+            tag=$GITHUB_REF
           fi
           
           # Build the container and name by tag
