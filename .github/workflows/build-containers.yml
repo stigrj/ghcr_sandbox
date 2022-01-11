@@ -30,7 +30,7 @@ jobs:
           image_name: ${{ matrix.program }}
           recipe_name: Singularity.def
         run: |
-          echo "Building ${{ matrix.program }}: REF:${{ GITHUB_REF }} SHA:${{ GITHUB_SHA }}"
+          echo "Building ${{ matrix.program }}: REF:${GITHUB_REF} SHA:${GITHUB_SHA}"
           echo "IMAGE_NAME=$image_name" >> $GITHUB_ENV
           sudo -E singularity build container.sif recipes/"$recipe_name"
           # use latest as tag
