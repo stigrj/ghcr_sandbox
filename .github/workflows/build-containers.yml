@@ -23,7 +23,7 @@ jobs:
       image: quay.io/singularity/singularity:v${{ matrix.singularity_version }}
       options: --privileged
 
-    name: Build ${{ matrix.program }}: REF:${GITHUB_REF} SHA:${GITHUB_SHA}
+    name: Build ${{ matrix.program }}
     steps:
       - name: Check out code for the container builds
         uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
           image_name: ${{ matrix.program }}-${{ matrix.version }}-${{ matrix.variant }}
           recipe_name: Singularity.def
         run: |
-          echo "Building ${{ matrix.program }}"
+          echo "Building ${{ matrix.program }}: REF:${GITHUB_REF} SHA:${GITHUB_SHA}"
 
           echo "IMAGE_NAME=$image_name" >> $GITHUB_ENV
           sudo -E singularity build container.sif "$recipe_name"
