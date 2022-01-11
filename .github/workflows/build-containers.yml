@@ -27,10 +27,10 @@ jobs:
 
       - name: Build container
         env:
-          image_name: ${{ matrix.program }}-${{ matrix.version }}-${{ matrix.variant }}
+          image_name: ${{ matrix.program }}
           recipe_name: Singularity.def
         run: |
-          echo "Building ${{ matrix.program }}: REF:${GITHUB_REF} SHA:${GITHUB_SHA}"
+          echo "Building ${{ matrix.program }}: REF:${{ GITHUB_REF }} SHA:${{ GITHUB_SHA }}"
           echo "IMAGE_NAME=$image_name" >> $GITHUB_ENV
           sudo -E singularity build container.sif recipes/"$recipe_name"
           # use latest as tag
@@ -39,7 +39,6 @@ jobs:
           echo "TAG=$tag" >> $GITHUB_ENV
 
       - name: Login and deploy container
-        if: (github.event_name != 'pull_request')
         run: |         
           echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
           echo "Pushing $IMAGE_NAME with tag $TAG"
