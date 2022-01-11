@@ -41,7 +41,7 @@ jobs:
           then
             tag="latest"
           else
-            tag=$GITHUB_REF
+            tag=basename $GITHUB_REF
           fi
           
           # Build the container and name by tag
