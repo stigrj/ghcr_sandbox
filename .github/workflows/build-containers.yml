@@ -18,6 +18,9 @@ jobs:
           - '3.9.2'
         program:
           - 'hello_world'
+        variant:
+          - 'vol1'
+          - 'vol2'
 
     container:
       image: quay.io/singularity/singularity:v${{ matrix.singularity_version }}
@@ -30,10 +33,10 @@ jobs:
 
       - name: Build container
         env:
-          image_name: ${{ matrix.program }}
+          image_name: ${{ matrix.program }}-${{ matrix.variant }}
           recipe_name: Singularity.def
         run: |
-          echo "Building ${{ matrix.program }}"
+          echo "Building ${{ matrix.program }}-${{ matrix.variant }}"
           echo "GITHUB_REF: ${GITHUB_REF}"
           echo "GITHUB_SHA: ${GITHUB_SHA}"
           echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
